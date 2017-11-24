@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MaxSize 30
+
+int main()
+{
+	char c[30];
+	int i,j,k,n;
+	while (scanf("%s", &c) != EOF) {
+		int a[30], b[200];
+		for (i = 0; i < 200; i++)
+			b[i] = 0;
+		char *p;
+		for (p = c,i = 0; *p != '\0'; p++)
+		{
+			a[i++] = *p - '0';
+		}
+		k = 0;
+		while (1) {
+			b[k++] = a[i - 1] % 2;
+			if (k == 200)
+				break;
+			for (j = 0; j < i; j++)
+			{
+				int t = a[j];
+				a[j] = t / 2;
+				a[j + 1] += (t % 2) * 10;
+			}
+		}
+
+		while (b[k - 1] == 0) {
+			k--;
+		}
+		for (j = k - 1; j >= 0; j--)
+			printf("%d", b[j]);
+		printf("\n");
+	}
+}
