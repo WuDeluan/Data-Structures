@@ -98,15 +98,15 @@ double Num(string Expression, int &i)
 	double integer = 0;  //initialize the interger part;
 	double decimal = 0;  //initialize the decimal part;
 	int k = 0; //a variable stores how many digits behind the decimal point;
-	while (!IsOperator(Expression[i])) 
+	while (!IsOperator(Expression[i])) //add i < Expression.size() when no "=" 
 	{
 		while (Expression[i] != '.' && !IsOperator(Expression[i]))//calculate the interger part;
-		{
+		{                                                         //add i < Expression.size() when no "=" 
 			integer *= 10;
 			integer += (Expression[i] - '0');
 			i++;
 		}
-		while (!IsOperator(Expression[i])) {
+		while (!IsOperator(Expression[i])) {                      // add i < Expression.size() when no "=" 
 			if (Expression[i] == '.')
 				i++;
 			else  //calculate the decimal part;
@@ -133,7 +133,7 @@ Stack<Node> InfixToPost(string Expression)
 	Stack<Node> PostStack;   //creat a stack with type of Node to store postfix expressions;
 	OperatorStack.InitStack(); 
 	PostStack.InitStack();
-	while (Expression[i] != '=') {
+	while (Expression[i] != '=') {  //i < Expression.size() when no "="
 		node.Operator = '#';
 		if (Expression[i] == '+' || Expression[i] == '-')
 		{
@@ -227,7 +227,7 @@ void WriteIntoFile(string Expression, double Num, string filename)
 {
 	filename += "_out.txt";
 	ofstream file(filename.c_str(), ios::app);
-	file << Expression << setprecision(6) << Num << endl;
+	file << Expression << setprecision(6) << Num << endl;  //add "=" when no "="
 	file.close();
 }
 
