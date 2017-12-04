@@ -2,6 +2,7 @@
 #include <string.h>
 #define LeftChild(i)(2 * (i) + 1)
 
+//插入排序
 void InsertionSort(char(*A)[20], int N)
 {
 	int j, P;
@@ -17,6 +18,7 @@ void InsertionSort(char(*A)[20], int N)
 	}
 }
 
+//堆排序
 void PercDown(char(*A)[20], int i, int N)
 {
 	int Child;
@@ -48,6 +50,25 @@ void HeapSort(char(*A)[20], int N)
 		strcpy(*(A + i), Tmp);
 		PercDown(A, 0, i);
 	}
+}
+
+//希尔排序
+void ShellSort(char (*A)[20], int N)
+{
+	int i, j, k, Increment;
+	char Tmp[20];
+	for (Increment = N / 2; Increment > 0; Increment /= 2)
+		for (i = Increment; i < N; i++)
+		{
+			strcpy(Tmp, *(A + i));
+			for (j = i; j >= Increment; j -= Increment)
+				if (strcmp(Tmp, *(A + j - Increment)) < 0)
+					strcpy(*(A + j), *(A + j - Increment));
+				else
+
+					break;
+			strcpy(*(A + j), Tmp);
+		}
 }
 
 int main()
