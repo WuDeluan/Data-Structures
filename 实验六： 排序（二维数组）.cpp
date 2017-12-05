@@ -10,7 +10,6 @@ void InsertionSort(char(*A)[20], int N)
 	char Tmp[20], *p;
 	for (P = 1; P < N; P++)
 	{
-		printf("%s ", (A + P));
 		strcpy(Tmp, *(A + P));
 		for (j = P; j > 0 && strcmp(Tmp, *(A + j - 1)) < 0; j--)
 			strcpy(*(A + j), *(A + j - 1));
