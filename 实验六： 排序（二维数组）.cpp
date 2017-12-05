@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #define LeftChild(i)(2 * (i) + 1)
+#define Cutoff 3
 
 //插入排序
 void InsertionSort(char(*A)[20], int N)
