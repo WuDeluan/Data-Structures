@@ -18,6 +18,14 @@ void InsertionSort(char(*A)[20], int N)
 }
 
 //堆排序
+void Swap(char a[],char b[])
+{
+	char Tmp[20];
+	strcpy(Tmp,a);
+	strcpy(a,b);
+	strcpy(b,Tmp);
+}
+
 void PercDown(char(*A)[20], int i, int N)
 {
 	int Child;
@@ -44,9 +52,7 @@ void HeapSort(char(*A)[20], int N)
 		PercDown(A, i, N);
 	for (i = N - 1; i > 0; i--)
 	{
-		strcpy(Tmp, *A);
-		strcpy(*A, *(A + i));
-		strcpy(*(A + i), Tmp);
+		Swap(*A, *(A + i));
 		PercDown(A, 0, i);
 	}
 }
@@ -121,9 +127,68 @@ void MergeSort(char (*A)[20],int N)
 	}
 }
 
+//快速排序
+char * Median3(char (*A)[20],int Left,int Right)
+{
+	int Center = (Left + Right) / 2;
+
+	if(strcmp(*(A + Left),*(A + Center)) > 0)
+		Swap(*(A + Left),*(A + Center));
+    if(strcmp(*(A + Left),*(A + Right)) > 0)
+		Swap(*(A + Left),*(A + Right));
+	if(strcmp(*(A + Center),*(A + Right)) > 0)
+		Swap(*(A + Center),*(A + Right));
+	Swap(*(A + Center),*(A + Right - 1));
+	return *(A + Right - 1);
+}
+
+void QSort(char (*A)[20],int Left,int Right)
+{
+	int i,j;
+	char Pivot[20];
+
+	if(Left + Cutoff <= Right)
+	{
+		strcpy(Pivot, Median3(A, Left, Right));
+		i = Left;
+		j = Right - 1;
+		for(; ;)
+		{
+			while(strcmp(*(A + (++i)),Pivot) < 0){}
+			while(strcmp(*(A + (--j)),Pivot) > 0){}
+			if(i < j)
+				Swap(*(A + i),*(A + j));
+			else
+				break;
+		}
+		Swap(*(A + i),*(A + Right - 1));
+
+		QSort(A,Left,i - 1);
+		QSort(A,i + 1,Right);
+	}
+	else
+		InsertionSort(A + Left,Right - Left + 1);
+}
+
+void QuickSort(char(*A)[20], int N)
+{
+	QSort(A, 0, N - 1);
+}
+
+//打印数组
+void Print(char(*A)[20], int N)
+{
+	for (int i = 0; i < N; i++)
+		printf("%s ", A + i);
+	printf("\n");
+}
+
 int main()
 {
 	char a[][20] = { "while","if","else","do","for" ,"switch","case"};
-	InsertionSort(a, 7);
+	Print(a, 7);
+	QuickSort(a, 7);
+	Print(a, 7);
+	
 	return 0;
 }
