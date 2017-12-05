@@ -70,6 +70,57 @@ void ShellSort(char (*A)[20], int N)
 		}
 }
 
+void Merge(char (*A)[20],char (*Tmp)[20],int Lpos,int Rpos,int RightEnd)
+{
+	int i,LeftEnd,NumElements,TmpPos;
+
+	LeftEnd = Rpos - 1;
+	TmpPos = Lpos;
+	NumElements = RightEnd - Lpos + 1;
+
+	while(Lpos <= LeftEnd && Rpos <= RightEnd)
+	{
+		if(strcmp(*(A + Lpos),*(A + Rpos)) == 0 || strcmp(*(A + Lpos),*(A + Rpos)) < 0)
+			strcpy(*(Tmp + TmpPos++),*(A + Lpos++));
+		else
+			strcpy(*(Tmp + TmpPos++),*(A + Rpos++));
+	}
+
+	while(Lpos <= LeftEnd)
+		strcpy(*(Tmp + TmpPos++),*(A + Lpos++));
+	while(Rpos <= RightEnd)
+		strcpy(*(Tmp + TmpPos++),*(A + Rpos++));
+
+	for(i = 0;i < NumElements;i++,RightEnd--)
+		strcpy(*(A + RightEnd),*(Tmp + RightEnd));
+}
+
+//归并排序
+void MSort(char (*A)[20],char (*Tmp)[20],int Left,int Right)
+{
+	int Center;
+
+	if(Left < Right)
+	{
+		Center = (Left + Right) / 2;
+		MSort(A,Tmp,Left,Center);
+		MSort(A,Tmp,Center + 1,Right);
+		Merge(A,Tmp,Left,Center + 1,Right);
+	}
+}
+
+void MergeSort(char (*A)[20],int N)
+{
+	char (*Tmp)[20];
+
+	Tmp = (char (*)[20])malloc(sizeof(char (*)[20]) * N);
+	if(Tmp != NULL)
+	{
+		MSort(A,Tmp,0,N - 1);
+		free(Tmp);
+	}
+}
+
 int main()
 {
 	char a[][20] = { "while","if","else","do","for" ,"switch","case"};
