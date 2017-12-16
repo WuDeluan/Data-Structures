@@ -1,3 +1,8 @@
+/*
+1）用邻接矩阵存储方式，表示下面的图，并输出。
+2）由上面的邻接矩阵产生邻接表，并输出。
+3）编程完成从顶点0开始的深度优先遍历和广度优先遍历。
+*/
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -81,6 +86,7 @@ MGraph CreateMGraph(int VertexNum)
 	return Graph;
 }
 
+//将邻接矩阵转化成邻接表
 void MGraphToLGraph(MGraph G,LGraph L)
 {
 	Vertex V, W;
@@ -101,8 +107,8 @@ void MGraphToLGraph(MGraph G,LGraph L)
 	}
 }
 
-
-void DFS(Vertex Start, MGraph G,int Visit[])
+//深度优先搜索
+void DFS(Vertex Start, MGraph G,int Visit[])  
 {
 	Vertex V, W;
 	V = Start;
@@ -115,6 +121,7 @@ void DFS(Vertex Start, MGraph G,int Visit[])
 	}
 }
 
+//广度优先搜索
 void BFS(Vertex Start, MGraph G)
 {
 	Vertex V, W;
@@ -140,6 +147,7 @@ void BFS(Vertex Start, MGraph G)
 	}
 }
 
+//打印邻接矩阵
 void PrintMGraph(MGraph G)
 {
 	Vertex V, W;
@@ -152,6 +160,7 @@ void PrintMGraph(MGraph G)
 	}
 }
 
+//打印邻接表
 void PrintLGraph(LGraph L)
 {
 	PtrToAdjVNode P;
@@ -165,6 +174,7 @@ void PrintLGraph(LGraph L)
 	}
 }
 
+//主函数
 int main()
 {
 	MGraph G = CreateMGraph(6);
