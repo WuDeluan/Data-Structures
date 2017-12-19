@@ -10,47 +10,47 @@
 #define INFINITY 65535
 
 typedef int Vertex;
-typedef int WeightType;     //边的权值设为整数
-typedef char DataType;      //顶点的数据存储
+typedef int WeightType;     //weigh of edges
+typedef char DataType;      //store data
 
-//边的定义
+//defination of edge
 typedef struct ENode
 {
-	Vertex V1, V2;       //边的两个顶点
-	WeightType Weight;   //边的权重
+	Vertex V1, V2;       //two vertices of each edge
+	WeightType Weight;   //weight of edge
 }*Edge;
 
-//图的结点定义
+//defination of adjacency-matrix-graph node
 typedef struct MNode
 {
-	int Nv;         //顶点数
-	int Ne;         //边数
-	WeightType Weight[MaxVertexNum][MaxVertexNum];   //邻接矩阵
+	int Nv;         //number of vertices
+	int Ne;         //number of edges
+	WeightType Weight[MaxVertexNum][MaxVertexNum];   //adjacency matrix
 }*MGraph;
 
-//邻接点的定义
+//defination of adjacency node
 typedef struct AdjVNode
 {
-	Vertex AdjV;           //邻接点下标
-	WeightType Weight;     //边权重
-	struct AdjVNode *Next; //指向下一邻接点的指针
+	Vertex AdjV;           //index of vertex
+	WeightType Weight;     //weight of edge
+	struct AdjVNode *Next; //pointer points to next node
 }*PtrToAdjVNode;
 
-//顶点表头结点的定义
+
 typedef struct VNode
 {
-	PtrToAdjVNode FirstEdge;   //边表头指针
+	PtrToAdjVNode FirstEdge;   
 }AdjList[MaxVertexNum];       
 
-//图结点的定义
+//defination of adjacency-matrix-graph node
 typedef struct LNode
 {
-	int Nv;     //顶点数
-	int Ne;     //边数
-	AdjList List;  //邻接表
-}*LGraph;       //以邻接表方式存储图类型
+	int Nv;     //number of vertices
+	int Ne;     //number of edges
+	AdjList List;  //adjacency list
+}*LGraph;       
 
-//初始化邻接表图
+//creat a adjacency-list-graph
 LGraph CreateLGraph(int VertexNum)
 {
 	Vertex V;
@@ -60,7 +60,7 @@ LGraph CreateLGraph(int VertexNum)
 	Graph->Nv = VertexNum;
 	Graph->Ne = 0;
 
-	//初始化邻接表表头
+	//creat a head of list
 	for (V = 0; V < Graph->Nv; V++)
 		Graph->List[V].FirstEdge = NULL;
 
@@ -68,14 +68,14 @@ LGraph CreateLGraph(int VertexNum)
 }
 
 
-//初始化一个图
+//creat a adjacency-matrix-graph
 MGraph CreateMGraph(int VertexNum)
 {
-	//初始化一个有VertexNum个结点但没有边的图
+	//create a graph with numbers of vertexNum nodes and without edge
 	Vertex V, W;
 	MGraph Graph;
 
-	Graph = (MGraph)malloc(sizeof(MNode));  //建立图
+	Graph = (MGraph)malloc(sizeof(MNode));  //build graph
 	Graph->Nv = VertexNum;
 	Graph->Ne = 0;
 
@@ -86,7 +86,7 @@ MGraph CreateMGraph(int VertexNum)
 	return Graph;
 }
 
-//将邻接矩阵转化成邻接表
+//matrix graph to adjacency-list-graph
 void MGraphToLGraph(MGraph G,LGraph L)
 {
 	Vertex V, W;
@@ -99,7 +99,7 @@ void MGraphToLGraph(MGraph G,LGraph L)
 				PtrToAdjVNode NewNode = (PtrToAdjVNode)malloc(sizeof(AdjVNode));
 				NewNode->AdjV = W;
 				NewNode->Weight = G->Weight[V][W];
-				//将V2插入V1的表头
+				//insert newnode to head of list
 				NewNode->Next = L->List[V].FirstEdge;
 				L->List[V].FirstEdge = NewNode;
 			}
@@ -107,7 +107,7 @@ void MGraphToLGraph(MGraph G,LGraph L)
 	}
 }
 
-//深度优先搜索
+//DFS
 void DFS(Vertex Start, MGraph G,int Visit[])  
 {
 	Vertex V, W;
@@ -121,7 +121,7 @@ void DFS(Vertex Start, MGraph G,int Visit[])
 	}
 }
 
-//广度优先搜索
+//BFS
 void BFS(Vertex Start, MGraph G)
 {
 	Vertex V, W;
@@ -147,7 +147,7 @@ void BFS(Vertex Start, MGraph G)
 	}
 }
 
-//打印邻接矩阵
+//print adjacency-matrix-graph
 void PrintMGraph(MGraph G)
 {
 	Vertex V, W;
@@ -160,7 +160,7 @@ void PrintMGraph(MGraph G)
 	}
 }
 
-//打印邻接表
+//print adjacenccy-list-graph
 void PrintLGraph(LGraph L)
 {
 	PtrToAdjVNode P;
@@ -174,7 +174,7 @@ void PrintLGraph(LGraph L)
 	}
 }
 
-//主函数
+
 int main()
 {
 	MGraph G = CreateMGraph(6);
