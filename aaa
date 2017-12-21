@@ -49,6 +49,7 @@ MGraph CreateGraph(int VertexNum)
 void InsertEdge(MGraph Graph, Edge E)
 {
 	Graph->Weight[E->V1][E->V2] = E->Weight;
+	Graph->Weight[E->V2][E->V1] = E->Weight;
 }
 
 //构建一个图
@@ -112,7 +113,7 @@ Vertex FindMinDist(MGraph Graph, Table *T)
 	if (MinDist < INFINITY)
 		return MinV;
 	else
-		return 0;
+		return -1;
 }
 
 void Dijkstra(MGraph Graph, Table *T)
@@ -121,7 +122,7 @@ void Dijkstra(MGraph Graph, Table *T)
 	for (;;)
 	{
 		V = FindMinDist(Graph, T);
-		if (V == 0)
+		if (V == -1)
 			break;
 		T[V].Known = 1;
 		for (W = 0; W <= Graph->Nv; W++)
@@ -136,22 +137,40 @@ void Dijkstra(MGraph Graph, Table *T)
 	}
 }
 
-Vertex FindMax(Table T)
+Vertex FindMax(MGraph Graph,Table *T)
 {
 	Vertex V;
-	for(V = 0;V < )
+	int Max = 0;
+	for (V = 0; V < Graph->Nv; V++)
+	{
+		if (T[V].Distence > T[Max].Distence)
+			Max = V;
+	}
+	return Max;
+}
+
+Vertex FindMin(Vertex *W,int i)
+{
+	Vertex Min = 0, V;
+	for (V = 0; V < i; V++)
+	{
+		if (W[V] < W[Min])
+			Min = V;
+	}
+	return Min;
 }
 int main()
 {
 	MGraph Graph = BuildGraph();
 	Table T[MaxVertexNum];
 	InitTable(Graph, T);
-	Vertex V;
-	for (V = 1; V <= Graph->Nv; V++)
+	Vertex V, W[MaxVertexNum];
+	int i = 0;
+	for (V = 0; V < Graph->Nv; V++)
 	{
 		T[V].Distence = 0;
 		Dijkstra(Graph, T);
-		FindMax(T);
+		W[i++] = FindMax(Graph, T);
 	}
-
+	V = FindMin(W, i);
 }
