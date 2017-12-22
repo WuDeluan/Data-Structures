@@ -137,25 +137,36 @@ void Dijkstra(MGraph Graph, Table *T)
 	}
 }
 
-Vertex FindMax(MGraph Graph,Table *T)
+void FindMaxPath(MGraph Graph,Table *T,int *MaxPath)
 {
 	Vertex V;
+	static int i = 0;
 	int Max = 0;
 	for (V = 0; V < Graph->Nv; V++)
 	{
-		if (T[V].Distence > T[Max].Distence)
-			Max = V;
+		if (T[V].Distence > Max)
+			Max = T[V].Distence;
 	}
-	return Max;
+	MaxPath[i++] = Max;
 }
 
-Vertex FindMin(Vertex *W,int i)
+void FindTotalPath(MGraph Graph, Table *T, int *TotalPath)
 {
-	Vertex Min = 0, V;
-	for (V = 0; V < i; V++)
+	Vertex V;
+	static int i = 0;
+	TotalPath[i] = 0;
+	for (V = 0; V < Graph->Nv; V++)
+		TotalPath[i] += T[V].Distence;
+	i++;
+}
+
+Vertex FindMin(int *A,int N)
+{
+	int i, Min = 0;
+	for (i = 0; i < N; i++)
 	{
-		if (W[V] < W[Min])
-			Min = V;
+		if (A[i] < A[Min])
+			Min = i;
 	}
 	return Min;
 }
@@ -163,14 +174,19 @@ int main()
 {
 	MGraph Graph = BuildGraph();
 	Table T[MaxVertexNum];
-	InitTable(Graph, T);
-	Vertex V, W[MaxVertexNum];
-	int i = 0;
+	Vertex V, W;
+	int MaxPath[MaxVertexNum], TotalPath[MaxVertexNum];
 	for (V = 0; V < Graph->Nv; V++)
 	{
+		InitTable(Graph, T);
 		T[V].Distence = 0;
 		Dijkstra(Graph, T);
-		W[i++] = FindMax(Graph, T);
+		FindMaxPath(Graph, T, MaxPath);
+		FindTotalPath(Graph, T, TotalPath);
 	}
-	V = FindMin(W, i);
+	V = FindMin(MaxPath,Graph->Nv);
+	W = FindMin(TotalPath,Graph->Nv);
+
+	printf("医院应建在%d村庄，距离医院最远的村庄到医院的路程最短。\n", V);
+	printf("医院应建在%d村庄，其它所有村庄到医院的路径总和最短。\n", W);
 }
