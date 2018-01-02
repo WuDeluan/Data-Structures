@@ -32,7 +32,7 @@ public:
 		{ 7,0,3,0,4,1 },
 		{ 0,0,0,4,0,2 },
 		{ 4,0,0,1,2,0 } };
-		ifstream file("D:\\aaa.txt");
+		ifstream file("D:\\Test.txt");
 		while (!file.eof()) 
 		{
 			file >> Index;
