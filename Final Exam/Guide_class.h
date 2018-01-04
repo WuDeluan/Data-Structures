@@ -8,48 +8,57 @@ private:
 	MGraph Graph;
 	Table T[MaxVertexNum];
 public:
+	MGraph getGraph()
+	{
+		return Graph;
+	};
+
 	void InitMGraph(int VertexNum)
 	{
 		Vertex V, W;
 
 		Graph = (MGraph)malloc(sizeof(MNode));
 		Graph->Nv = VertexNum;
+		Graph->NewNv = VertexNum;
 
 		for (V = 0; V < Graph->Nv; V++)
 			for (W = 0; W < Graph->Nv; W++)
 				Graph->Weight[V][W] = INFINITY;
 	};
 
-	void BuildMGraph(int VertexNum)
+	void BuildMGraph()
 	{
 		char Name[200], Introduction[200];
-		int Index;
-		InitMGraph(VertexNum);
-		int Matrix[MaxVertexNum][MaxVertexNum] = {
-			{ 0,5,0,7,0,4 },
-		{ 5,4,0,0,0,0 },
-		{ 0,4,0,3,0,0 },
-		{ 7,0,3,0,4,1 },
-		{ 0,0,0,4,0,2 },
-		{ 4,0,0,1,2,0 } };
-		ifstream file("D:\\Test.txt");
-		while (!file.eof()) 
-		{
-			file >> Index;
-			file >> Name;
-			file >> Introduction;
-			strcpy(Graph->Data[Index - 1].Name, Name);
-			strcpy(Graph->Data[Index - 1].Introduction, Introduction);
-		}
-		file.close();
+		int Index, VertexNum;
 		Vertex V, W;
+		WeightType Weight;
+		ifstream Path("D:\\Path.txt");
+		Path >> VertexNum;
+		InitMGraph(VertexNum);
 		for (V = 0; V < VertexNum; V++)
 		{
 			for (W = 0; W < VertexNum; W++)
 			{
-				Graph->Weight[V][W] = Matrix[V][W];
+				if (!Path.eof())
+				{
+					Path >> Weight;
+					Graph->Weight[V][W] = Weight;
+				}
 			}
 		}
+		Path.close();
+		ifstream file("D:\\Test.txt");
+		while (!file.eof())
+		{
+			file >> Index;
+			file >> Name;
+			file >> Introduction;
+			if (file.eof())
+				break;
+			strcpy(Graph->Data[Index - 1].Name, Name);
+			strcpy(Graph->Data[Index - 1].Introduction, Introduction);
+		}
+		file.close();
 	};
 
 	Vertex Search(char *Name)
@@ -60,6 +69,7 @@ public:
 			if (strcmp(Graph->Data[V].Name, Name) == 0)
 				return V;
 		}
+		return -1;
 	};
 
 	void Introduction()
@@ -71,15 +81,15 @@ public:
 		cout << Graph->Data[V].Introduction << endl;
 	};
 
-	void Add()
+	int Add()
 	{
 		char Name[200], Introduction[200];
 		Vertex V, W;
 		WeightType Weight;
 		int i;
-		cout << "请输入地点名称：";
+		cout << "\t\t\t请输入地点名称：";
 		cin >> Name;
-		cout << "请输入地点简介：";
+		cout << "\t\t\t请输入地点简介：";
 		cin >> Introduction;
 		strcpy(Graph->Data[Graph->Nv].Name, Name);
 		strcpy(Graph->Data[Graph->Nv].Introduction, Introduction);
@@ -89,33 +99,40 @@ public:
 			Graph->Weight[Graph->Nv][i] = 0;
 		}
 
-		cout << "请输入与该地点相邻的景点数：";
+		cout << "\t\t\t请输入与该地点相邻的景点数：";
 		cin >> i;
 		while (i--)
 		{
-			cout << "请分别输入相邻景点的名称及距离：";
+			cout << "\t\t\t请分别输入相邻景点的名称及距离：";
 			cin >> Name;
 			cin >> Weight;
 			V = Search(Name);
+			if (V == -1)
+				return -1;
 			Graph->Weight[Graph->Nv][V] = Weight;
 			Graph->Weight[V][Graph->Nv] = Weight;
 		}
 		Graph->Nv++;
+		return 0;
 	};
 
-	void Delete()
+	int Delete()
 	{
 		char Name[200];
 		Vertex V, W;
-		cout << "请输入待删除景点的名称：";
+		cout << "\t\t\t请输入待删除景点的名称：";
 		cin >> Name;
 		V = Search(Name);
+		if (V == -1)
+			return -1;
 		for (W = 0; W < Graph->Nv; W++)
 		{
 			Graph->Weight[W][V] = 0;
 			Graph->Weight[V][W] = 0;
 		}
 		strcpy(Graph->Data[V].Name, "Delete");
+		Graph->NewNv--;
+		return 0;
 	};
 
 	void InitTable(Vertex Start)
@@ -207,6 +224,37 @@ public:
 			cout << endl;
 		}
 	};//测试用
+
+	void SaveFile()
+	{
+		Vertex V, W;
+		ofstream Path("D:\\Path.txt");
+		Path << Graph->NewNv << endl;
+		for (V = 0; V < Graph->Nv; V++)
+		{
+			if (strcmp(Graph->Data[V].Name, "Delete") == 0)
+				continue;
+			for (W = 0; W < Graph->Nv; W++)
+			{
+				if (strcmp(Graph->Data[W].Name, "Delete") == 0)
+					continue;
+				Path << Graph->Weight[V][W] << " ";
+			}
+			Path << endl;
+		}
+		Path.close();
+		ofstream file("D:\\Test.txt");
+		for (V = 0, W = 1; V < Graph->Nv; V++)
+		{
+			if (strcmp(Graph->Data[V].Name, "Delete") == 0)
+				continue;
+			file << W << " ";
+			file << Graph->Data[V].Name << " ";
+			file << Graph->Data[V].Introduction << " " << endl;
+			W++;
+		}
+		file.close();
+	}
 };
 
 #endif 
