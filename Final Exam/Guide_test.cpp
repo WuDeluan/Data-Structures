@@ -1,14 +1,11 @@
 #include "Guide_class.h"
+#include "Menu.h"
 
 int main()
 {
 	Guide G;
-	G.BuildMGraph(6);
-	G.PrintMGraph();
-	G.InitTable(1);
-	G.MinDis();
-	G.Add();
-	G.PrintMGraph();
-	G.Delete();
-	G.PrintMGraph();
+	G.BuildMGraph();
+	MenuC(G);
+
+	return 0;
 }
