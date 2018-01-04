@@ -24,6 +24,7 @@ typedef struct
 typedef struct MNode
 {
 	int Nv;         //顶点数
+	int NewNv;
 	WeightType Weight[MaxVertexNum][MaxVertexNum];   //邻接矩阵
 	DataType Data[MaxVertexNum];
 }*MGraph;
@@ -35,4 +36,4 @@ typedef struct TableNode
 	Vertex Path;
 }Table;
 
-#endif // !GUIDE_PROGRAM
+#endif
