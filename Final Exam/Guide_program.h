@@ -36,4 +36,4 @@ typedef struct TableNode
 	Vertex Path;
 }Table;
 
-#endif
+#endif // !GUIDE_PROGRAM
