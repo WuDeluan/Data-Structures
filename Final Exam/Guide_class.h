@@ -8,11 +8,12 @@ private:
 	MGraph Graph;
 	Table T[MaxVertexNum];
 public:
+	//返回图
 	MGraph getGraph()
 	{
 		return Graph;
 	};
-
+	//初始化图
 	void InitMGraph(int VertexNum)
 	{
 		Vertex V, W;
@@ -25,7 +26,7 @@ public:
 			for (W = 0; W < Graph->Nv; W++)
 				Graph->Weight[V][W] = INFINITY;
 	};
-
+	//根据文件建立图
 	void BuildMGraph()
 	{
 		char Name[200], Introduction[200];
@@ -60,7 +61,7 @@ public:
 		}
 		file.close();
 	};
-
+	//从图中查找某一景点，存在返回在图中的位置，否则返回-1
 	Vertex Search(char *Name)
 	{
 		Vertex V;
@@ -71,16 +72,7 @@ public:
 		}
 		return -1;
 	};
-
-	void Introduction()
-	{
-		char Name[20];
-		cout << "请输入要查询的景点名称：";
-		cin >> Name;
-		Vertex V = Search(Name);
-		cout << Graph->Data[V].Introduction << endl;
-	};
-
+	//增加结点信息
 	int Add()
 	{
 		char Name[200], Introduction[200];
@@ -112,10 +104,10 @@ public:
 			Graph->Weight[Graph->Nv][V] = Weight;
 			Graph->Weight[V][Graph->Nv] = Weight;
 		}
-		Graph->Nv++;
+		Graph->NewNv++;
 		return 0;
 	};
-
+	//删除结点信息
 	int Delete()
 	{
 		char Name[200];
@@ -134,7 +126,7 @@ public:
 		Graph->NewNv--;
 		return 0;
 	};
-
+	//初始化表格
 	void InitTable(Vertex Start)
 	{
 		int i;
@@ -146,7 +138,7 @@ public:
 		}
 		T[Start].Distence = 0;
 	};
-
+	//Dijkstra查找最短距离
 	Vertex FindMinDist()
 	{
 		Vertex MinV, V;
@@ -165,17 +157,21 @@ public:
 		else
 			return -1;
 	}
-
+	//打印最短路径
 	void PrintPath(Vertex V)
 	{
+		static int i = 0;
 		if (T[V].Path != -1)
 		{
 			PrintPath(T[V].Path);
-			cout << "to ";
+			cout << "-->";
 		}
 		cout << Graph->Data[V].Name << " ";
+		i++;
+		if (i % 4 == 0)
+			cout << "\n\t\t   ";
 	};
-
+	//查找最短路径
 	void Dijkstra()
 	{
 		Vertex V, W;
@@ -196,45 +192,26 @@ public:
 			}
 		}
 	};
-
-	void MinDis()
+	//最短路径函数
+	void MinDist(Vertex Start,Vertex End)
 	{
-		Vertex Start, V;
-		char Name[200];
-		cout << "请输入您的当前位置：";
-		cin >> Name;
-		Start = Search(Name);
-		cout << "请输入您想要到达的景点：";
-		cin >> Name;
-		V = Search(Name);
 		InitTable(Start);
 		Dijkstra();
-		PrintPath(V);
+		cout << "\n\t最短线路：";
+		PrintPath(End);
 		cout << endl;
-	};
-
-	void PrintMGraph()
-	{
-		Vertex V, W;
-		cout << "有向图G的邻接矩阵:" << endl;
-		for (V = 0; V < Graph->Nv; V++)
-		{
-			for (W = 0; W < Graph->Nv; W++)
-				cout << Graph->Weight[V][W] << "  ";
-			cout << endl;
-		}
-	};//测试用
-
+	}
+	//保存数据
 	void SaveFile()
 	{
 		Vertex V, W;
 		ofstream Path("D:\\Path.txt");
 		Path << Graph->NewNv << endl;
-		for (V = 0; V < Graph->Nv; V++)
+		for (V = 0; V < Graph->NewNv; V++)
 		{
 			if (strcmp(Graph->Data[V].Name, "Delete") == 0)
 				continue;
-			for (W = 0; W < Graph->Nv; W++)
+			for (W = 0; W < Graph->NewNv; W++)
 			{
 				if (strcmp(Graph->Data[W].Name, "Delete") == 0)
 					continue;
@@ -244,7 +221,7 @@ public:
 		}
 		Path.close();
 		ofstream file("D:\\Test.txt");
-		for (V = 0, W = 1; V < Graph->Nv; V++)
+		for (V = 0, W = 1; V < Graph->NewNv; V++)
 		{
 			if (strcmp(Graph->Data[V].Name, "Delete") == 0)
 				continue;
