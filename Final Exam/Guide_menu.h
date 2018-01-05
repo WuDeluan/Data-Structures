@@ -7,20 +7,22 @@
 
 using namespace std;
 
-void MenuC(Guide G);
-void MenuE(Guide G);
-void SchoolIntroductionC(Guide G);
-void SchoolIntroductionE(Guide G);
-void SpotsListC(Guide G);
+void Menu(Guide G);
+void SchoolIntroduction(Guide G);
+void ShowAPoint(MGraph Graph, int i);
+void SpotsList(Guide G);
+void Search(Guide G);
+void PathSearch(Guide G);
 void MenageInfomation(Guide G);
 void MenageInfomation2(Guide G);
-
-void MenuC(Guide G)
+//主菜单
+void Menu(Guide G)
 {
 	system("Cls");
 	cout << "***************************************************************************" << endl;
 	cout << "*                                                                         *" << endl;
 	cout << "*                    欢迎来到宁波工程学院校园导游系统                     *" << endl;
+	cout << "*                                                                         *" << endl;
 	cout << "*                                                                         *" << endl;
 	cout << "*                              1.宁工简介                                 *" << endl;
 	cout << "*                                                                         *" << endl;
@@ -28,62 +30,32 @@ void MenuC(Guide G)
 	cout << "*                                                                         *" << endl;
 	cout << "*                              3.景点查询                                 *" << endl;
 	cout << "*                                                                         *" << endl;
-	cout << "*                              4.路径查询                                 *" << endl;
+	cout << "*                              4.线路查询                                 *" << endl;
 	cout << "*                                                                         *" << endl;
 	cout << "*                              5.景点管理                                 *" << endl;
 	cout << "*                                                                         *" << endl;
 	cout << "*                                                                         *" << endl;
 	cout << "*                                                                         *" << endl;
-	cout << "*                                                            6.语言切换   *" << endl;
 	cout << "***************************************************************************" << endl;
 	int a;
-	cin >> a;
-	switch (a)
-	{
-	case 1:SchoolIntroductionC(G); break;
-	case 2:SpotsListC(G); break;
-	case 5:MenageInfomation(G); break;
-	case 6:MenuE(G); break;
-	}
+	while (cin >> a)
+		switch (a)
+		{
+		case 1:SchoolIntroduction(G); break;
+		case 2:SpotsList(G); break;
+		case 3:Search(G); break;
+		case 4:PathSearch(G); break;
+		case 5:MenageInfomation(G); break;
+		default:cout << "请输入正确指令！" << endl;
+		}
 }
-
-void MenuE(Guide G)
+//学校简介
+void SchoolIntroduction(Guide G)
 {
 	system("Cls");
 	cout << "***************************************************************************" << endl;
 	cout << "*                                                                         *" << endl;
-	cout << "*   Welcome to NingBo University Of Technology School Tour Guide System   *" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*                         1.School Introduction                           *" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*                         2.Feature Spots List                            *" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*                         3.Feature Spots Searching                       *" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*                         4.Route Searching                               *" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*                         5.Fearure Spots menagement                      *" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*                                                   6.Language Changing   *" << endl;
-	cout << "***************************************************************************" << endl;
-	int a;
-	cin >> a;
-	switch (a)
-	{
-	case 1:SchoolIntroductionE(G); break;
-
-	case 6:MenuC(G); break;
-	}
-}
-
-void SchoolIntroductionC(Guide G)
-{
-	system("Cls");
-	cout << "***************************************************************************" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*                         宁波工程学院简介                                *" << endl;
+	cout << "*                           宁波工程学院简介                              *" << endl;
 	cout << "*                                                                         *" << endl;
 	cout << "*                                                                         *" << endl;
 	cout << "*       宁波工程学院是由宁波市政府创办的全日制普通本科院校，创建于1983年。*" << endl;
@@ -101,42 +73,11 @@ void SchoolIntroductionC(Guide G)
 	{
 		if (a == 1)
 		{
-			MenuC(G);
+			Menu(G);
 			break;
 		}
 		else
 			cout << "请输入正确指令!" << endl;
-	}
-}
-
-void SchoolIntroductionE(Guide G)
-{
-	system("Cls");
-	cout << "***************************************************************************" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*            NingBo University Of Technology Introduction                 *" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*        Ningbo Institute of Technology is a full-time general under-     *" << endl;
-	cout << "*     graduate college founded. By the Ningbo Municipal Government,       *" << endl;
-	cout << "*     founded in 1983. May 2004 by the college upgraded its name to       *" << endl;
-	cout << "*     Ningbo Institute of Technology. In 2010, the Ministry of Education  *" << endl;
-	cout << "*     was included in the first batch of 61 implementing colleges and     *" << endl;
-	cout << "*     universities in the Excellent Engineer Education and Training       *" << endl;
-	cout << "*     Program.                                                            *" << endl;
-	cout << "*                                                                         *" << endl;
-	cout << "*                                                          1.return back  *" << endl;
-	cout << "***************************************************************************" << endl;
-	int a;
-	while (cin >> a)
-	{
-		if (a == 1)
-		{
-			MenuE(G);
-			break;
-		}
-		else
-			cout << "Please enter correct order " << endl;
 	}
 }
 
@@ -148,8 +89,27 @@ void Tital1()
 	cout << "\t\t\t\t宁波工程学院景点展示" << endl;
 	cout << endl;
 }
-
-void SpotsListC(Guide G)
+//展示某一景点
+void ShowAPoint(MGraph Graph, int i)
+{
+	char *p;
+	cout << "\t\t*" << Graph->Data[i].Name << ":\n" << endl;
+	cout << "\t\t";
+	for (p = Graph->Data[i].Introduction; *p != '\0'; p++)
+	{
+		if (*p == '#')
+		{
+			cout << endl;
+			cout << "\t\t";
+			p++;
+		}
+		cout << *p;
+	}
+	cout << "\n\t\t----------------------------------------------------" << endl;
+	cout << endl;
+}
+//展示所有景点
+void SpotsList(Guide G)
 {
 	Tital1();
 	int i, j = 0, a; char *p;
@@ -159,24 +119,10 @@ void SpotsListC(Guide G)
 		if (strcmp(Graph->Data[i].Name, "Delete") == 0)
 			continue;
 		j++;
-		cout << "\t\t*" << Graph->Data[i].Name << ":\n" << endl;
-		cout << "\t\t";
-		for (p = Graph->Data[i].Introduction; *p != '\0'; p++)
-		{
-			if (*p == '#')
-			{
-				cout << endl;
-				cout << "\t\t";
-				p++;
-			}
-			cout << *p;
-		}
-		cout << "\n\t\t----------------------------------------------------" << endl;
-		cout << endl;
-
+		ShowAPoint(Graph, i);
 		if (j % 3 == 0 || i == Graph->Nv - 1)
 		{
-			cout << "\t\t1.上一页\t\t\t\t   2.下一页" << endl;
+			cout << "\t\t1.上一页\t\t2.下一页\t\t3.退出" << endl;
 			cout << "******************************************************************************" << endl;
 			while (cin >> a)
 			{
@@ -201,6 +147,11 @@ void SpotsListC(Guide G)
 						break;
 					}
 				}
+				else if (a == 3)
+				{
+					Menu(G);
+					break;
+				}
 				else
 					cout << "请输入正确指令!" << endl;
 			}
@@ -208,7 +159,71 @@ void SpotsListC(Guide G)
 		}
 	}
 }
+//查找景点
+void Search(Guide G)
+{
+	system("Cls");
+	cout << "***************************************************************************" << endl;
+	cout << "                                                                           " << endl;
+	cout << "                       宁波工程学院校园景点查询                            " << endl;
+	cout << endl;
+	cout << "\t\t\t请输入查询景点名称：";
+	char Name[200];
+	Vertex V;
+	MGraph Graph = G.getGraph();
+	cin >> Name;
+	cout << endl;
+	V = G.Search(Name);
+	if (V == -1)
+		cout << "\t\t\t  该景点不存在！" << "\n" << endl;
+	else
+		ShowAPoint(Graph, V);
+	cout << "\t\t\t 1.继续查询\t\t2.退出查询" << endl;
 
+	int a;
+	while (cin >> a)
+	{
+		if (a == 2)
+			Menu(G);
+		else if (a == 1)
+			Search(G);
+		else
+			cout << "\t\t\t请输入正确指令！" << endl;
+	}
+}
+//线路查询
+void PathSearch(Guide G)
+{
+	Vertex Start, End;
+	char Name[200];
+	system("Cls");
+	cout << "******************************************************************************" << endl;
+	cout << endl;
+	cout << "\t\t\t  宁波工程学院景点线路查询" << endl;
+	cout << endl;
+	cout << "\t\t\t请输入您的当前位置：";
+	cin >> Name;
+	Start = G.Search(Name);
+	cout << "\t\t\t请输入您想要到达的景点：";
+	cin >> Name;
+	End = G.Search(Name);
+	if (Start != -1 && End != -1)
+		G.MinDist(Start, End);
+	else
+		cout << "\t\t\t请输入正确地址！" << endl;
+	cout << "\n\t\t\t1.继续查询\t\t2.退出" << endl;
+	int a;
+	while (cin >> a)
+	{
+		if (a == 1)
+			PathSearch(G);
+		else if (a == 2)
+			Menu(G);
+		else
+			cout << "请输入正确的指令！" << endl;
+	}
+}
+//管理景点信息
 void MenageInfomation(Guide G)
 {
 	system("Cls");
@@ -223,7 +238,7 @@ void MenageInfomation(Guide G)
 	while (cin >> a)
 	{
 		if (a == 2)
-			MenuC(G);
+			Menu(G);
 		else if (a == 1)
 		{
 			cout << "\t\t\t  请输入密码：";
@@ -232,7 +247,7 @@ void MenageInfomation(Guide G)
 				if (a == 321)
 					break;
 				if (a == 1)
-					MenuC(G);
+					Menu(G);
 				cout << "\t\t\t密码错误，请重试！" << endl;
 				cout << "\t\t\t请输入密码：";
 			}
@@ -249,7 +264,8 @@ void MenageInfomation2(Guide G)
 	cout << "\n\n\n\t\t\t请选择以下功能:" << "\n" << endl;
 	cout << "\t\t\t1.增加景点" << "\n" << endl;
 	cout << "\t\t\t2.删除景点" << "\n" << endl;
-	cout << "\t\t\t3.更新信息" << endl;
+	cout << "\t\t\t3.更新信息" << "\n" << endl;
+	cout << "\t\t\t4.退出管理" << endl;
 	int a;
 	while (cin >> a)
 	{
@@ -258,7 +274,10 @@ void MenageInfomation2(Guide G)
 			if (G.Add() == -1)
 				cout << "\t\t\t添加失败！" << "\n" << endl;
 			else
+			{
+				G.SaveFile();
 				cout << "\t\t\t添加成功！" << "\n" << endl;
+			}
 			break;
 		}
 		else if (a == 2)
@@ -266,17 +285,22 @@ void MenageInfomation2(Guide G)
 			if (G.Delete() == -1)
 				cout << "\t\t\t该景点不存在！" << "\n" << endl;
 			else
+			{
+				G.SaveFile();
 				cout << "\t\t\t删除成功！" << "\n" << endl;
+			}
 			break;
 		}
 		else if (a == 3)
 		{
-			G.SaveFile();
+			G.BuildMGraph();
 			cout << "\t\t\t信息已更新！" << "\n" << endl;
 			break;
 		}
+		else if (a == 4)
+			Menu(G);
 		else
-			cout << "\t\t\t 请输入正确指令！" << endl;;
+			cout << "\t\t\t 请输入正确指令！" << endl;
 	}
 	cout << "\t\t\t1.继续管理\t\t2.退出" << endl;
 	while (cin >> a)
@@ -288,6 +312,7 @@ void MenageInfomation2(Guide G)
 		else
 			cout << "请输入正确的指令！" << endl;
 	}
-	MenuC(G);
+	Menu(G);
 }
-#endif
+
+#endif 
