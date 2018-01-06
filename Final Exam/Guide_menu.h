@@ -194,8 +194,9 @@ void Search(Guide G)
 //线路查询
 void PathSearch(Guide G)
 {
-	Vertex Start, End;
-	char Name[200];
+	Vertex Start, End, Mark;
+	MGraph Graph = G.getGraph();
+	char Name[200]; int a;
 	system("Cls");
 	cout << "******************************************************************************" << endl;
 	cout << endl;
@@ -208,11 +209,36 @@ void PathSearch(Guide G)
 	cin >> Name;
 	End = G.Search(Name);
 	if (Start != -1 && End != -1)
-		G.MinDist(Start, End);
+	{
+		cout << "\n\t\t\t请选择线路模式：" << endl;
+		cout << "\t\t\t1.最短线路\n\t\t\t2.包含某一景点的路径\n\t\t\t3.所有路径" << endl;
+		while (cin >> a)
+		{
+			if (a == 1)
+			{
+				G.MinDist(Start, End);
+				break;
+			}
+			else if (a == 2)
+			{
+				cout << "\t\t\t请输入需要经过的景点：";
+				cin >> Name;
+				Mark = G.Search(Name);
+				G.AllRoad(Start, Graph, End, Mark);
+				break;
+			}
+			else if (a == 3)
+			{
+				G.AllRoad(Start, Graph, End, -1);
+				break;
+			}
+			else
+				cout << "请输入正确的指令！" << endl;
+		}
+	}
 	else
 		cout << "\t\t\t请输入正确地址！" << endl;
 	cout << "\n\t\t\t1.继续查询\t\t2.退出" << endl;
-	int a;
 	while (cin >> a)
 	{
 		if (a == 1)
@@ -261,17 +287,16 @@ void MenageInfomation(Guide G)
 void MenageInfomation2(Guide G)
 {
 	system("Cls");
-	cout << "\n\n\n\t\t\t请选择以下功能:" << "\n" << endl;
-	cout << "\t\t\t1.增加景点" << "\n" << endl;
-	cout << "\t\t\t2.删除景点" << "\n" << endl;
-	cout << "\t\t\t3.更新信息" << "\n" << endl;
-	cout << "\t\t\t4.退出管理" << endl;
+	cout << "\n\n\t\t\t请选择以下功能:" << "\n" << endl;
+	cout << "\t\t1.增加景点\t\t2.删除景点" << "\n" << endl;
+	cout << "\t\t3.增加道路\t\t4.删除道路" << "\n" << endl;
+	cout << "\t\t5.更新信息\t\t6.退出管理" << endl;
 	int a;
 	while (cin >> a)
 	{
 		if (a == 1)
 		{
-			if (G.Add() == -1)
+			if (G.AddPoint() == -1)
 				cout << "\t\t\t添加失败！" << "\n" << endl;
 			else
 			{
@@ -282,7 +307,7 @@ void MenageInfomation2(Guide G)
 		}
 		else if (a == 2)
 		{
-			if (G.Delete() == -1)
+			if (G.DeletePoint() == -1)
 				cout << "\t\t\t该景点不存在！" << "\n" << endl;
 			else
 			{
@@ -293,11 +318,33 @@ void MenageInfomation2(Guide G)
 		}
 		else if (a == 3)
 		{
+			if (G.AddLoad() == -1)
+				cout << "\t\t\t该道路不存在！" << "\n" << endl;
+			else
+			{
+				G.SaveFile();
+				cout << "\t\t\t删除成功！" << "\n" << endl;
+			}
+			break;
+		}
+		else if (a == 4)
+		{
+			if (G.DeleteLoad() == -1)
+				cout << "\t\t\t该道路不存在！" << "\n" << endl;
+			else
+			{
+				G.SaveFile();
+				cout << "\t\t\t删除成功！" << "\n" << endl;
+			}
+			break;
+		}
+		else if (a == 5)
+		{
 			G.BuildMGraph();
 			cout << "\t\t\t信息已更新！" << "\n" << endl;
 			break;
 		}
-		else if (a == 4)
+		else if (a == 6)
 			Menu(G);
 		else
 			cout << "\t\t\t 请输入正确指令！" << endl;
