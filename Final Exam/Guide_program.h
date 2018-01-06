@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string.h>
 #include <stdlib.h>
+#include <stack>
 
 using namespace std;
 
@@ -37,3 +38,5 @@ typedef struct TableNode
 }Table;
 
 #endif // !GUIDE_PROGRAM
+
+
