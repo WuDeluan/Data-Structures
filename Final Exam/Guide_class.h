@@ -131,7 +131,7 @@ public:
 		return 0;
 	};
 	//增加道路信息
-	int AddLoad()
+	int AddRoad()
 	{
 		char Name1[200], Name2[200];
 		Vertex V, W;
@@ -152,8 +152,8 @@ public:
 		}
 		return -1;
 	};
-	//删除道路信息
-	int DeleteLoad()
+	//删除道路信息 
+	int DeleteRoad()
 	{
 		char Name1[200], Name2[200];
 		Vertex V, W;
@@ -204,18 +204,16 @@ public:
 			return -1;
 	}
 	//打印最短路径
-	void PrintPath(Vertex V)
+	void PrintPath(Vertex V,Vertex W,int &path)
 	{
-		static int i = 0;
+		W = T[V].Path;
 		if (T[V].Path != -1)
 		{
-			PrintPath(T[V].Path);
-			cout << "-->";
+			PrintPath(T[V].Path, W, path);
+			cout << "-->" << Graph->Weight[V][W] << "-->" ;
+			path += Graph->Weight[V][W];
 		}
 		cout << Graph->Data[V].Name << " ";
-		i++;
-		if (i % 4 == 0)
-			cout << "\n\t\t   ";
 	};
 	//查找最短路径
 	void Dijkstra()
@@ -241,16 +239,17 @@ public:
 	//最短路径函数
 	void MinDist(Vertex Start, Vertex End)
 	{
+		int path = 0;
 		InitTable(Start);
 		Dijkstra();
 		cout << "\n\t最短线路：";
-		PrintPath(End);
-		cout << endl;
+		PrintPath(End,End,path);
+		cout << "( "<<path<<" m)"<<endl;
 	}
 	//若Mark为-1，输出所有路径，否则，输出经过编号为Mark的景点的路径
 	void AllRoad(Vertex Start, MGraph G, Vertex Final, Vertex Mark) {
 		Vertex V, Q, X;                                   //操纵变量
-		int k, y, i = 0, t, num = 0;
+		int k, y, i = 0, t, num = 0, path = 0;
 		stack<Vertex>SAll;
 		//输出路径辅助变量
 		int Visit[1000] = { 0 };                               //访问标记
@@ -289,18 +288,24 @@ public:
 					if (t == 1)
 					{
 						cout << ++num << " ";
-						for (k = 0; k < i; k++)
+						for (k = 0,path = 0; k < i; k++)
+						{
 							cout << G->Data[load[k]].Name << " ";
-						cout << endl;
+							path += G->Weight[load[k]][load[k + 1]];
+						}
+						cout <<"(" <<path<<" m)"<< endl;
 					}
 					t = 0;
 				}
 				else
 				{
 					cout << ++num << " ";
-					for (k = 0; k < i; k++)
+					for (k = 0,path = 0; k < i; k++)
+					{
 						cout << G->Data[load[k]].Name << " ";
-					cout << endl;
+						path += G->Weight[load[k]][load[k + 1]];
+					}
+					cout << "(" << path << " m)" << endl;
 				}
 				Visit[V] = 0;
 				SAll.pop();                           ////输出路径或该节点找不到下一个符合条件节点，访问上一个节点
