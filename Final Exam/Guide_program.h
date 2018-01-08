@@ -10,8 +10,7 @@
 using namespace std;
 
 #define MaxVertexNum 100
-#define INFINITY 65535
-
+#define INFINITY 655350
 typedef int Vertex;
 typedef int WeightType;     //边的权值设为整数
 
@@ -38,5 +37,3 @@ typedef struct TableNode
 }Table;
 
 #endif // !GUIDE_PROGRAM
-
-
