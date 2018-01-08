@@ -318,18 +318,18 @@ void MenageInfomation2(Guide G)
 		}
 		else if (a == 3)
 		{
-			if (G.AddLoad() == -1)
+			if (G.AddRoad() == -1)
 				cout << "\t\t\t该道路不存在！" << "\n" << endl;
 			else
 			{
 				G.SaveFile();
-				cout << "\t\t\t删除成功！" << "\n" << endl;
+				cout << "\t\t\t添加成功！" << "\n" << endl;
 			}
 			break;
 		}
 		else if (a == 4)
 		{
-			if (G.DeleteLoad() == -1)
+			if (G.DeleteRoad() == -1)
 				cout << "\t\t\t该道路不存在！" << "\n" << endl;
 			else
 			{
